@@ -38,7 +38,7 @@ export function FileFieldsInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const { body, files } = await handleMultipartFileFields(
+      const { body, files, remove } = await handleMultipartFileFields(
         req,
         this.fieldsMap,
         this.options,
@@ -47,17 +47,7 @@ export function FileFieldsInterceptor(
       req.body = body;
       req.storageFiles = files;
 
-      return next.handle().pipe(
-        tap(async () => {
-          const allFiles = ([] as StorageFile[]).concat(
-            ...Object.values(files),
-          );
-
-          return await Promise.all(
-            allFiles.map((file) => this.options.storage!.removeFile(file)),
-          );
-        }),
-      );
+      return next.handle().pipe(tap(remove));
     }
   }
 

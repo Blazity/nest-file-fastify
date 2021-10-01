@@ -29,7 +29,7 @@ export function FileInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const { file, body } = await handleMultipartSingleFile(
+      const { file, body, remove } = await handleMultipartSingleFile(
         req,
         fieldname,
         this.options,
@@ -38,11 +38,7 @@ export function FileInterceptor(
       req.body = body;
       req.storageFile = file;
 
-      return next.handle().pipe(
-        tap(async () => {
-          return await this.options.storage!.removeFile(file);
-        }),
-      );
+      return next.handle().pipe(tap(remove));
     }
   }
 

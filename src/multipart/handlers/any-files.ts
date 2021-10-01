@@ -2,6 +2,7 @@ import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../../options";
 import { StorageFile } from "../../storage";
+import { removeFilesFactory } from "../file";
 import { getParts } from "../request";
 
 export const handleMultipartAnyFiles = async (
@@ -21,5 +22,5 @@ export const handleMultipartAnyFiles = async (
     }
   }
 
-  return { body, files };
+  return { body, files, remove: removeFilesFactory(options.storage!, files) };
 };

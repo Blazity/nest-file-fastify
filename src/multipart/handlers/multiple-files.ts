@@ -3,6 +3,7 @@ import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../../options";
 import { StorageFile } from "../../storage";
+import { removeFilesFactory } from "../file";
 import { getParts } from "../request";
 
 export const handleMultipartMultipleFiles = async (
@@ -40,5 +41,5 @@ export const handleMultipartMultipleFiles = async (
     throw new BadRequestException(`Field ${fieldname} is required`);
   }
 
-  return { body, files };
+  return { body, files, remove: removeFilesFactory(options.storage!, files) };
 };

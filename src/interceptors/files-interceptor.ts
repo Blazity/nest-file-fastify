@@ -30,7 +30,7 @@ export function FilesInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const { body, files } = await handleMultipartMultipleFiles(
+      const { body, files, remove } = await handleMultipartMultipleFiles(
         req,
         fieldname,
         maxCount,
@@ -40,13 +40,7 @@ export function FilesInterceptor(
       req.body = body;
       req.storageFiles = files;
 
-      return next.handle().pipe(
-        tap(async () => {
-          return await Promise.all(
-            files.map((file) => this.options.storage!.removeFile(file)),
-          );
-        }),
-      );
+      return next.handle().pipe(tap(remove));
     }
   }
 

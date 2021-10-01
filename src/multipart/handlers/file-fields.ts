@@ -2,7 +2,8 @@ import { BadRequestException } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../../options";
-import { StorageFile } from "../../storage/storage";
+import { Storage, StorageFile } from "../../storage/storage";
+import { removeFilesFactory } from "../file";
 import { getParts } from "../request";
 
 export interface UploadField {
@@ -73,5 +74,11 @@ export const handleMultipartFileFields = async (
     }
   }
 
-  return { body, files };
+  const allFiles = ([] as StorageFile[]).concat(...Object.values(files));
+
+  return {
+    body,
+    files,
+    remove: removeFilesFactory(options.storage!, allFiles),
+  };
 };

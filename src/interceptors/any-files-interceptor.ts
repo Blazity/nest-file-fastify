@@ -28,18 +28,15 @@ export function AnyFilesInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const { body, files } = await handleMultipartAnyFiles(req, this.options);
+      const { body, files, remove } = await handleMultipartAnyFiles(
+        req,
+        this.options,
+      );
 
       req.body = body;
       req.storageFiles = files;
 
-      return next.handle().pipe(
-        tap(async () => {
-          return await Promise.all(
-            files.map((file) => this.options.storage!.removeFile(file)),
-          );
-        }),
-      );
+      return next.handle().pipe(tap(remove));
     }
   }
 

@@ -1,7 +1,7 @@
 import { DiskStorage, MemoryStorage, Storage } from "./storage";
 
 export type UploadOptions = busboy.BusboyConfig &
-  ({ dest?: string } & { storage?: Storage<any, any> });
+  ({ dest?: string } & { storage?: Storage });
 
 export const DEFAULT_UPLOAD_OPTIONS: Partial<UploadOptions> = {
   storage: new MemoryStorage(),
