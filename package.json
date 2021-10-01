@@ -24,7 +24,8 @@
   "scripts": {
     "dev": "concurrently \"tsc --watch --p tsconfig.lib.json\" \"tsc --watch --p tsconfig.examples.json\"",
     "watch": "nodemon ./build/examples/index.js",
-    "build": "tsc --p tsconfig.lib.json && tsc --p tsconfig.examples.json",
+    "build:ci": "tsc --p tsconfig.lib.json && tsc --p tsconfig.examples.json",
+    "build": "tsc --p tsconfig.lib.json",
     "lint": "eslint \"src/**\" --ext \".js,.jsx,.ts,.tsx\"",
     "lint:fix": "npm run lint -- --fix",
     "clean": "rimraf build",
