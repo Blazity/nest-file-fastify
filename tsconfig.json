@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "preserveWatchOutput": true,
+    "allowJs": false,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "composite": true,
+    "incremental": true,
+    "declaration": true,
+
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["esnext"],
+    "moduleResolution": "node",
+
+    "baseUrl": ".",
+    "rootDir": "."
+  },
+  "exclude": ["build", "node_modules"]
+}
