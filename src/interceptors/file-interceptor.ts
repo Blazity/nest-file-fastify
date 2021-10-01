@@ -5,12 +5,11 @@ import {
   mixin,
   NestInterceptor,
   Type,
-  BadRequestException,
 } from "@nestjs/common";
 
-import { MultipartFile, getMultipartRequest } from "../fastify";
+import { getMultipartRequest } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
-import { StorageFile } from "../storage";
+import { handleMultipartSingleFile } from "../multipart/handlers/single-file";
 
 export function FileInterceptor(
   fieldname: string,
@@ -30,35 +29,11 @@ export function FileInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const body: Record<string, any> = {};
-
-      const parts = req.parts(
+      const { file, body } = await handleMultipartSingleFile(
+        req,
+        fieldname,
         this.options,
-      ) as AsyncIterableIterator<MultipartFile>;
-
-      let file: StorageFile | undefined = undefined;
-
-      for await (const part of parts) {
-        if (part.file) {
-          if (part.fieldname !== fieldname) {
-            throw new BadRequestException(
-              `Field ${part.fieldname} doesn't allow file`,
-            );
-          } else if (file != null) {
-            throw new BadRequestException(
-              `Field ${fieldname} requires only one file`,
-            );
-          }
-
-          file = await this.options.storage!.handleFile(part, req);
-        } else {
-          body[part.fieldname] = part.value;
-        }
-      }
-
-      if (file == null) {
-        throw new BadRequestException(`Field ${fieldname} is required`);
-      }
+      );
 
       req.body = body;
       req.storageFile = file;

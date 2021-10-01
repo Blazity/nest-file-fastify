@@ -7,9 +7,9 @@ import {
   Type,
 } from "@nestjs/common";
 
-import { MultipartFile, getMultipartRequest } from "../fastify";
+import { getMultipartRequest } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
-import { StorageFile } from "../storage";
+import { handleMultipartAnyFiles } from "../multipart/handlers/any-files";
 
 export function AnyFilesInterceptor(
   options?: UploadOptions,
@@ -28,21 +28,7 @@ export function AnyFilesInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const body: Record<string, any> = {};
-
-      const parts = req.parts(
-        this.options,
-      ) as AsyncIterableIterator<MultipartFile>;
-
-      const files: StorageFile[] = [];
-
-      for await (const part of parts) {
-        if (part.file) {
-          files.push(await this.options.storage!.handleFile(part, req));
-        } else {
-          body[part.fieldname] = part.value;
-        }
-      }
+      const { body, files } = await handleMultipartAnyFiles(req, this.options);
 
       req.body = body;
       req.storageFiles = files;

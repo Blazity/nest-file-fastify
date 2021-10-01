@@ -4,7 +4,9 @@ import { FastifyRequest } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 import { IncomingMessage, Server } from "http";
 
+import { UploadOptions } from "../options";
 import { StorageFile } from "../storage";
+import { MultipartFile } from "./file";
 
 export type FastifyMultipartRequest = FastifyRequest<
   RouteGenericInterface,
@@ -24,3 +26,9 @@ export const getMultipartRequest = (ctx: HttpArgumentsHost) => {
 
   return req;
 };
+
+export const getParts = (req: FastifyRequest, options: UploadOptions) => {
+  return req.parts(options) as MultipartsIterator;
+};
+
+export type MultipartsIterator = AsyncIterableIterator<MultipartFile>;

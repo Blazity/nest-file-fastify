@@ -24,7 +24,6 @@
     "lib": ["esnext"],
     "moduleResolution": "node",
 
-    "baseUrl": ".",
     "rootDir": "."
   },
   "exclude": ["build", "node_modules"]

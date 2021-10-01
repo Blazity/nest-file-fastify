@@ -1,6 +1,5 @@
 import { Observable, tap } from "rxjs";
 import {
-  BadRequestException,
   CallHandler,
   ExecutionContext,
   mixin,
@@ -8,9 +7,9 @@ import {
   Type,
 } from "@nestjs/common";
 
-import { MultipartFile, getMultipartRequest } from "../fastify";
+import { getMultipartRequest } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
-import { StorageFile } from "../storage";
+import { handleMultipartMultipleFiles } from "../multipart/handlers/multiple-files";
 
 export function FilesInterceptor(
   fieldname: string,
@@ -31,33 +30,12 @@ export function FilesInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const body: Record<string, any> = {};
-
-      const parts = req.parts(
+      const { body, files } = await handleMultipartMultipleFiles(
+        req,
+        fieldname,
+        maxCount,
         this.options,
-      ) as AsyncIterableIterator<MultipartFile>;
-
-      const files: StorageFile[] = [];
-
-      for await (const part of parts) {
-        if (part.file) {
-          if (part.fieldname !== fieldname) {
-            throw new BadRequestException(
-              `Field ${part.fieldname} doesn't allow files`,
-            );
-          }
-
-          if (files.length + 1 > maxCount) {
-            throw new BadRequestException(
-              `Field ${part.fieldname} allows only ${maxCount} files`,
-            );
-          }
-
-          files.push(await this.options.storage!.handleFile(part, req));
-        } else {
-          body[part.fieldname] = part.value;
-        }
-      }
+      );
 
       req.body = body;
       req.storageFiles = files;
