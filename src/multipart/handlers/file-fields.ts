@@ -2,7 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../../options";
-import { Storage, StorageFile } from "../../storage/storage";
+import { StorageFile } from "../../storage/storage";
 import { removeFilesFactory } from "../file";
 import { getParts } from "../request";
 
@@ -65,14 +65,7 @@ export const handleMultipartFileFields = async (
     }
   }
 
-  const fields = Array.from(fieldsMap.keys());
-  const providedFields = Object.keys(files);
-
-  for (const field of fields) {
-    if (!providedFields.includes(field)) {
-      throw new BadRequestException(`Field ${field} is required`);
-    }
-  }
+  validateFieldsMap(fieldsMap, files);
 
   const allFiles = ([] as StorageFile[]).concat(...Object.values(files));
 
@@ -81,4 +74,18 @@ export const handleMultipartFileFields = async (
     files,
     remove: removeFilesFactory(options.storage!, allFiles),
   };
+};
+
+const validateFieldsMap = (
+  map: Map<string, UploadFieldMapEntry>,
+  files: Record<string, StorageFile[]>,
+) => {
+  const fields = Array.from(map.keys());
+  const providedFields = Object.keys(files);
+
+  for (const field of fields) {
+    if (!providedFields.includes(field)) {
+      throw new BadRequestException(`Field ${field} is required`);
+    }
+  }
 };

@@ -9,7 +9,6 @@ import {
 
 import { getMultipartRequest } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
-import { StorageFile } from "../storage";
 import {
   handleMultipartFileFields,
   UploadField,
