@@ -3,8 +3,8 @@ import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage/storage";
-import { removeFilesFactory } from "../file";
 import { getParts } from "../request";
+import { removeStorageFiles } from "../file";
 
 export interface UploadField {
   /**
@@ -39,37 +39,47 @@ export const handleMultipartFileFields = async (
 
   const files: Record<string, StorageFile[]> = {};
 
-  for await (const part of parts) {
-    if (part.file) {
-      const fieldOptions = fieldsMap.get(part.fieldname);
+  const removeFiles = async (error?: boolean) => {
+    const allFiles = ([] as StorageFile[]).concat(...Object.values(files));
+    return await removeStorageFiles(options.storage!, allFiles, error);
+  };
 
-      if (fieldOptions == null) {
-        throw new BadRequestException(
-          `Field ${part.fieldname} doesn't accept files`,
+  try {
+    for await (const part of parts) {
+      if (part.file) {
+        const fieldOptions = fieldsMap.get(part.fieldname);
+
+        if (fieldOptions == null) {
+          throw new BadRequestException(
+            `Field ${part.fieldname} doesn't accept files`,
+          );
+        }
+
+        if (files[part.fieldname] == null) {
+          files[part.fieldname] = [];
+        }
+
+        if (files[part.fieldname].length + 1 > fieldOptions.maxCount) {
+          throw new BadRequestException(
+            `Field ${part.fieldname} accepts max ${fieldOptions.maxCount} files`,
+          );
+        }
+
+        files[part.fieldname].push(
+          await options.storage!.handleFile(part, req),
         );
+      } else {
+        body[part.fieldname] = part.value;
       }
-
-      if (files[part.fieldname] == null) {
-        files[part.fieldname] = [];
-      }
-
-      if (files[part.fieldname].length + 1 > fieldOptions.maxCount) {
-        throw new BadRequestException(
-          `Field ${part.fieldname} accepts max ${fieldOptions.maxCount} files`,
-        );
-      }
-
-      files[part.fieldname].push(await options.storage!.handleFile(part, req));
-    } else {
-      body[part.fieldname] = part.value;
     }
+  } catch (error) {
+    await removeFiles(true);
+    throw error;
   }
-
-  const allFiles = ([] as StorageFile[]).concat(...Object.values(files));
 
   return {
     body,
     files,
-    remove: removeFilesFactory(options.storage!, allFiles),
+    remove: removeFiles,
   };
 };

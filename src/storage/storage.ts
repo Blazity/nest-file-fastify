@@ -10,6 +10,6 @@ export interface StorageFile {
 
 export interface Storage<T extends StorageFile = StorageFile, K = any> {
   handleFile: (file: MultipartFile, req: FastifyRequest) => Promise<T>;
-  removeFile: (file: T) => Promise<void> | void;
+  removeFile: (file: T, force?: boolean) => Promise<void> | void;
   options?: K;
 }

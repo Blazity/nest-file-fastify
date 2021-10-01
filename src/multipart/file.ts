@@ -8,14 +8,13 @@ export type MultipartFile = Omit<_MultipartFile, "file"> & {
   file: Readable & { truncated?: boolean };
 };
 
-export const removeFileFactory =
-  (storage: Storage, file?: StorageFile) => async () => {
-    if (!file) return;
-    await storage.removeFile(file);
-  };
-
-export const removeFilesFactory =
-  (storage: Storage, files?: (StorageFile | undefined)[]) => async () => {
-    if (files == null) return;
-    await Promise.all(files.map((file) => file && storage.removeFile(file)));
-  };
+export const removeStorageFiles = async (
+  storage: Storage,
+  files?: (StorageFile | undefined)[],
+  force?: boolean,
+) => {
+  if (files == null) return;
+  await Promise.all(
+    files.map((file) => file && storage.removeFile(file, force)),
+  );
+};

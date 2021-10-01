@@ -77,8 +77,8 @@ export class DiskStorage
     };
   }
 
-  public async removeFile(file: DiskStorageFile) {
-    if (!this.options?.removeAfter) return;
+  public async removeFile(file: DiskStorageFile, force?: boolean) {
+    if (!this.options?.removeAfter && !force) return;
 
     await unlink(file.path);
   }

@@ -3,7 +3,7 @@ import { FastifyRequest } from "fastify";
 
 import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
-import { removeFilesFactory } from "../file";
+import { removeStorageFiles } from "../file";
 import { getParts } from "../request";
 
 export const handleMultipartMultipleFiles = async (
@@ -17,25 +17,34 @@ export const handleMultipartMultipleFiles = async (
 
   const files: StorageFile[] = [];
 
-  for await (const part of parts) {
-    if (part.file) {
-      if (part.fieldname !== fieldname) {
-        throw new BadRequestException(
-          `Field ${part.fieldname} doesn't accept files`,
-        );
-      }
+  const removeFiles = async (error?: boolean) => {
+    return await removeStorageFiles(options.storage!, files, error);
+  };
 
-      if (files.length + 1 > maxCount) {
-        throw new BadRequestException(
-          `Field ${part.fieldname} accepts max ${maxCount} files`,
-        );
-      }
+  try {
+    for await (const part of parts) {
+      if (part.file) {
+        if (part.fieldname !== fieldname) {
+          throw new BadRequestException(
+            `Field ${part.fieldname} doesn't accept files`,
+          );
+        }
 
-      files.push(await options.storage!.handleFile(part, req));
-    } else {
-      body[part.fieldname] = part.value;
+        if (files.length + 1 > maxCount) {
+          throw new BadRequestException(
+            `Field ${part.fieldname} accepts max ${maxCount} files`,
+          );
+        }
+
+        files.push(await options.storage!.handleFile(part, req));
+      } else {
+        body[part.fieldname] = part.value;
+      }
     }
+  } catch (error) {
+    await removeFiles(error);
+    throw error;
   }
 
-  return { body, files, remove: removeFilesFactory(options.storage!, files) };
+  return { body, files, remove: removeFiles };
 };
