@@ -7,8 +7,8 @@ import {
   Type,
 } from "@nestjs/common";
 
-import { getMultipartRequest } from "../multipart";
-import { transformUploadOptions, UploadOptions } from "../options";
+import { getMultipartRequest } from "../multipart/request";
+import { transformUploadOptions, UploadOptions } from "../multipart/options";
 import { handleMultipartSingleFile } from "../multipart/handlers/single-file";
 
 export function FileInterceptor(

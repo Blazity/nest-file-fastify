@@ -1,7 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 
-import { UploadOptions } from "../../options";
+import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
 import { removeFileFactory } from "../file";
 import { getParts } from "../request";

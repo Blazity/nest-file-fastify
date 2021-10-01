@@ -4,7 +4,7 @@ import { FastifyRequest } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 import { IncomingMessage, Server } from "http";
 
-import { UploadOptions } from "../options";
+import { UploadOptions } from "../multipart/options";
 import { StorageFile } from "../storage";
 import { MultipartFile } from "./file";
 

@@ -1,6 +1,6 @@
 import { FastifyRequest } from "fastify";
 
-import { UploadOptions } from "../../options";
+import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
 import { removeFilesFactory } from "../file";
 import { getParts } from "../request";

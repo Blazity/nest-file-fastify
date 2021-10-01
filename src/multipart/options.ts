@@ -1,4 +1,4 @@
-import { DiskStorage, MemoryStorage, Storage } from "./storage";
+import { DiskStorage, MemoryStorage, Storage } from "../storage";
 
 export type UploadOptions = busboy.BusboyConfig &
   ({ dest?: string } & { storage?: Storage });
