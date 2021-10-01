@@ -3,7 +3,9 @@ import { MultipartFile } from "fastify-multipart";
 
 export interface StorageFile {
   size: number;
-  file: MultipartFile;
+  fieldname: string;
+  encoding: string;
+  mimetype: string;
 }
 
 export interface Storage<T extends StorageFile = StorageFile, K = any> {

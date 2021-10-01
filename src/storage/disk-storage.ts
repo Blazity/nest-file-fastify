@@ -63,13 +63,17 @@ export class DiskStorage
 
     await pump(file.file, stream);
 
+    const { encoding, fieldname, mimetype } = file;
+
     return {
       size: stream.bytesWritten,
       dest,
       filename,
       originalFilename: file.filename,
       path,
-      file,
+      mimetype,
+      encoding,
+      fieldname,
     };
   }
 

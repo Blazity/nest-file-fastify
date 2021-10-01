@@ -16,10 +16,14 @@ export class MemoryStorage implements Storage<MemoryStorageFile> {
   ) {
     const buffer = await file.toBuffer();
 
+    const { encoding, mimetype, fieldname } = file;
+
     return {
       buffer,
       size: buffer.length,
-      file,
+      encoding,
+      mimetype,
+      fieldname,
     };
   }
 
