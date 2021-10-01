@@ -5,6 +5,7 @@ import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage/storage";
 import { getParts } from "../request";
 import { removeStorageFiles } from "../file";
+import { filterUpload } from "../filter";
 
 export interface UploadField {
   /**
@@ -65,9 +66,11 @@ export const handleMultipartFileFields = async (
           );
         }
 
-        files[part.fieldname].push(
-          await options.storage!.handleFile(part, req),
-        );
+        const file = await options.storage!.handleFile(part, req);
+
+        if (await filterUpload(options, req, file)) {
+          files[part.fieldname].push(file);
+        }
       } else {
         body[part.fieldname] = part.value;
       }

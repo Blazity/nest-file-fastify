@@ -1,7 +1,11 @@
 import { DiskStorage, MemoryStorage, Storage } from "../storage";
+import { UploadFilterHandler } from "./filter";
 
-export type UploadOptions = busboy.BusboyConfig &
-  ({ dest?: string } & { storage?: Storage });
+export type UploadOptions = busboy.BusboyConfig & {
+  dest?: string;
+  storage?: Storage;
+  filter?: UploadFilterHandler;
+};
 
 export const DEFAULT_UPLOAD_OPTIONS: Partial<UploadOptions> = {
   storage: new MemoryStorage(),

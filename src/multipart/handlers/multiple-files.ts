@@ -5,6 +5,7 @@ import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
 import { removeStorageFiles } from "../file";
 import { getParts } from "../request";
+import { filterUpload } from "../filter";
 
 export const handleMultipartMultipleFiles = async (
   req: FastifyRequest,
@@ -36,7 +37,11 @@ export const handleMultipartMultipleFiles = async (
           );
         }
 
-        files.push(await options.storage!.handleFile(part, req));
+        const file = await options.storage!.handleFile(part, req);
+
+        if (await filterUpload(options, req, file)) {
+          files.push(file);
+        }
       } else {
         body[part.fieldname] = part.value;
       }
