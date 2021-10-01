@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 
-import { getMultipartRequest } from "../request";
+import { getMultipartRequest } from "../fastify";
 import { StorageFile } from "../storage/storage";
 
 export const UploadedFile = createParamDecorator(

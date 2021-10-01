@@ -1,0 +1,28 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: yarn install --prefer-offline --frozen-lockfile
+        env:
+          ADBLOCK: true
+
+      - name: Build the library
+        run: yarn build:ci

@@ -4,7 +4,7 @@ import { FastifyRequest } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 import { IncomingMessage, Server } from "http";
 
-import { StorageFile } from "./storage";
+import { StorageFile } from "../storage";
 
 export type FastifyMultipartRequest = FastifyRequest<
   RouteGenericInterface,

@@ -7,9 +7,8 @@ import {
   Type,
 } from "@nestjs/common";
 
-import { MultipartFile } from "../fastify";
+import { MultipartFile, getMultipartRequest } from "../fastify";
 import { transformUploadOptions, UploadOptions } from "../options";
-import { getMultipartRequest } from "../request";
 import { StorageFile } from "../storage";
 
 export function AnyFilesInterceptor(
