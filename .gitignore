@@ -4,3 +4,5 @@ yarn-error.log
 logs
 .eslintcache
 build
+.uploads
+.uploads_2

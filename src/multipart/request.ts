@@ -21,7 +21,7 @@ export const getMultipartRequest = (ctx: HttpArgumentsHost) => {
   const req = ctx.getRequest<FastifyMultipartRequest>();
 
   if (!req.isMultipart()) {
-    throw new BadRequestException();
+    throw new BadRequestException("Not a multipart request");
   }
 
   return req;

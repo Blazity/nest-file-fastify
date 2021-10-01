@@ -70,7 +70,7 @@ import { FileFieldsInterceptor, UploadedFiles, StorageFile } from '@blazity/nest
 
 @Post('upload')
 @UseInterceptors(FileFieldsInterceptor([
-  { name: 'photo', maxCount: 1 },
+  { name: 'avatar', maxCount: 1 },
   { name: 'background', maxCount: 1 },
 ]))
 uploadFile(@UploadedFiles() files: { avatar?: StorageFile[], background?: StorageFile[] }) {
