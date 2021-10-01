@@ -9,11 +9,13 @@ export type MultipartFile = Omit<_MultipartFile, "file"> & {
 };
 
 export const removeFileFactory =
-  (storage: Storage, file: StorageFile) => async () => {
+  (storage: Storage, file?: StorageFile) => async () => {
+    if (!file) return;
     await storage.removeFile(file);
   };
 
 export const removeFilesFactory =
-  (storage: Storage, files: StorageFile[]) => async () => {
-    await Promise.all(files.map((file) => storage.removeFile(file)));
+  (storage: Storage, files?: (StorageFile | undefined)[]) => async () => {
+    if (files == null) return;
+    await Promise.all(files.map((file) => file && storage.removeFile(file)));
   };

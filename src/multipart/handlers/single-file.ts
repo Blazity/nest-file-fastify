@@ -20,11 +20,11 @@ export const handleMultipartSingleFile = async (
     if (part.file) {
       if (part.fieldname !== fieldname) {
         throw new BadRequestException(
-          `Field ${part.fieldname} doesn't allow file`,
+          `Field ${part.fieldname} doesn't accept file`,
         );
       } else if (file != null) {
         throw new BadRequestException(
-          `Field ${fieldname} requires only one file`,
+          `Field ${fieldname} accepts only one file`,
         );
       }
 
@@ -32,10 +32,6 @@ export const handleMultipartSingleFile = async (
     } else {
       body[part.fieldname] = part.value;
     }
-  }
-
-  if (file == null) {
-    throw new BadRequestException(`Field ${fieldname} is required`);
   }
 
   return {

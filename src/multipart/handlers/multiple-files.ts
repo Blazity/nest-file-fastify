@@ -21,13 +21,13 @@ export const handleMultipartMultipleFiles = async (
     if (part.file) {
       if (part.fieldname !== fieldname) {
         throw new BadRequestException(
-          `Field ${part.fieldname} doesn't allow files`,
+          `Field ${part.fieldname} doesn't accept files`,
         );
       }
 
       if (files.length + 1 > maxCount) {
         throw new BadRequestException(
-          `Field ${part.fieldname} allows only ${maxCount} files`,
+          `Field ${part.fieldname} accepts max ${maxCount} files`,
         );
       }
 
@@ -35,10 +35,6 @@ export const handleMultipartMultipleFiles = async (
     } else {
       body[part.fieldname] = part.value;
     }
-  }
-
-  if (files.length === 0) {
-    throw new BadRequestException(`Field ${fieldname} is required`);
   }
 
   return { body, files, remove: removeFilesFactory(options.storage!, files) };

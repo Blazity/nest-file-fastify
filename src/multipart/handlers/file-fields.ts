@@ -45,7 +45,7 @@ export const handleMultipartFileFields = async (
 
       if (fieldOptions == null) {
         throw new BadRequestException(
-          `Field ${part.fieldname} doesn't allow files`,
+          `Field ${part.fieldname} doesn't accept files`,
         );
       }
 
@@ -55,7 +55,7 @@ export const handleMultipartFileFields = async (
 
       if (files[part.fieldname].length + 1 > fieldOptions.maxCount) {
         throw new BadRequestException(
-          `Field ${part.fieldname} allows only ${fieldOptions.maxCount} files`,
+          `Field ${part.fieldname} accepts max ${fieldOptions.maxCount} files`,
         );
       }
 
@@ -65,8 +65,6 @@ export const handleMultipartFileFields = async (
     }
   }
 
-  validateFieldsMap(fieldsMap, files);
-
   const allFiles = ([] as StorageFile[]).concat(...Object.values(files));
 
   return {
@@ -74,18 +72,4 @@ export const handleMultipartFileFields = async (
     files,
     remove: removeFilesFactory(options.storage!, allFiles),
   };
-};
-
-const validateFieldsMap = (
-  map: Map<string, UploadFieldMapEntry>,
-  files: Record<string, StorageFile[]>,
-) => {
-  const fields = Array.from(map.keys());
-  const providedFields = Object.keys(files);
-
-  for (const field of fields) {
-    if (!providedFields.includes(field)) {
-      throw new BadRequestException(`Field ${field} is required`);
-    }
-  }
 };
