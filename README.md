@@ -1,5 +1,5 @@
 <div align="left">
-  <h1> Nest.js file decorators for fastify</h1>
+  <h1> fastify-multipart for Nest.js</h1>
 
 [![Github Actions](https://img.shields.io/github/workflow/status/blazity/nest-file-fastify/Build?style=flat-square)](https://github.com/Blazity/nest-file-fastify)
 [![NPM](https://img.shields.io/npm/v/@blazity/nest-file-fastify.svg?style=flat-square)](https://www.npmjs.com/package/@blazity/nest-file-fastify)

@@ -1,12 +1,25 @@
 {
   "name": "@blazity/nest-file-fastify",
-  "description": "File decorators for Nest.js and Fastify",
+  "description": "fastify-multipart decorators for Nest.js",
+  "license": "MIT",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
     "build/src"
   ],
-  "license": "MIT",
+  "keywords": [
+    "nest",
+    "nest.js",
+    "fastify",
+    "multipart",
+    "fastify-multipart",
+    "upload",
+    "file",
+    "blazity"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "concurrently \"tsc --watch --p tsconfig.lib.json\" \"tsc --watch --p tsconfig.examples.json\"",
     "watch": "nodemon ./build/examples/index.js",
