@@ -12,36 +12,27 @@ export type UploadFilterFile =
 export type UploadFilterHandler = (
   req: FastifyRequest,
   file: UploadFilterFile,
-  cb: UploadFilterHandlerCallback,
-) => void;
+) => Promise<boolean | string> | boolean | string;
 
-export type UploadFilterHandlerCallback = (
-  err?: string | null,
-  accept?: boolean,
-) => void;
-
-export const filterUpload = (
+export const filterUpload = async (
   uploadOptions: UploadOptions,
   req: FastifyRequest,
   file: UploadFilterFile,
-) => {
-  return new Promise<boolean>((resolve, reject) => {
-    if (uploadOptions.filter == null) {
-      return resolve(true);
+): Promise<boolean> => {
+  if (uploadOptions.filter == null) {
+    return true;
+  }
+
+  try {
+    const res = await uploadOptions.filter(req, file);
+
+    if (typeof res === "string") {
+      throw new BadRequestException(res);
     }
 
-    const cb: UploadFilterHandlerCallback = async (err, accept) => {
-      if (!accept || err != null) {
-        await uploadOptions.storage!.removeFile(file, true);
-      }
-
-      if (err != null) {
-        return reject(new BadRequestException(err));
-      }
-
-      resolve(accept !== false);
-    };
-
-    uploadOptions.filter(req, file, cb);
-  });
+    return res;
+  } catch (error) {
+    await uploadOptions.storage!.removeFile(file, true);
+    throw error;
+  }
 };
