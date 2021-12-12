@@ -36,5 +36,5 @@ export const handleMultipartAnyFiles = async (
     throw error;
   }
 
-  return { body, files, remove: removeFiles };
+  return { body, files, remove: () => removeFiles() };
 };

@@ -83,6 +83,6 @@ export const handleMultipartFileFields = async (
   return {
     body,
     files,
-    remove: removeFiles,
+    remove: () => removeFiles(),
   };
 };
