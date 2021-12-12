@@ -51,6 +51,6 @@ export const handleMultipartSingleFile = async (
   return {
     body,
     file,
-    remove: removeFiles,
+    remove: () => removeFiles(),
   };
 };

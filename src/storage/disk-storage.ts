@@ -42,10 +42,19 @@ const excecuteStorageHandler = (
   return null;
 };
 
+const ENV_TESTS_STORAGE_TMP_PATH = process.env.__TESTS_TMP_PATH__;
 export class DiskStorage
   implements Storage<DiskStorageFile, DiskStorageOptions>
 {
-  constructor(public readonly options?: DiskStorageOptions) {}
+  public readonly options?: DiskStorageOptions;
+
+  constructor(options?: DiskStorageOptions) {
+    this.options = options;
+
+    if (ENV_TESTS_STORAGE_TMP_PATH != null) {
+      this.options = { ...this.options, dest: ENV_TESTS_STORAGE_TMP_PATH };
+    }
+  }
 
   public async handleFile(
     file: MultipartFile,
