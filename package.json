@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
+  "homepage": "https://blazity.com/",
   "files": [
     "build/src"
   ],
