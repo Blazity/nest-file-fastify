@@ -1,0 +1,45 @@
+name: NPM Publish
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      NPM_REGISTRY: registry.npmjs.org/
+      NPM_SCOPE: blazity
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Authenticate npm
+        run: |
+          npm config set @${{ env.NPM_SCOPE }}:registry https://${{ env.NPM_REGISTRY }}
+          npm config set -- '//${{ env.NPM_REGISTRY }}:_authToken' "${{ secrets.NPM_PUBLISH_TOKEN }}"
+
+      - uses: actions/cache@v2.1.6
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --prefer-offline --frozen-lockfile
+        env:
+          ADBLOCK: true
+
+      - name: Build
+        run: yarn build
+
+      - name: Publish
+        run: npm publish
