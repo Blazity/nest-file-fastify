@@ -51,7 +51,7 @@ uploadFile(@UploadedFile() file: MemoryStorageFile) {
 
 - `fieldname`: string - name of the field that holds a file
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Array of files
 
@@ -71,7 +71,7 @@ uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
 
 - `maxCount`: optional number - maximum number of files to accept
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Multiple files
 
@@ -90,9 +90,9 @@ uploadFile(@UploadedFiles() files: { avatar?: MemoryStorageFile[], background?: 
 
 `FileFieldsInterceptor` arguments:
 
-- `uploadFields`: object of type [`UploadField`](https://github.com/Blazity/nest-file-fastify/blob/master/src/interceptors/file-fields-interceptor.ts#L15)
+- `uploadFields`: object of type [`UploadField`](src/interceptors/file-fields-interceptor.ts#L19)
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Any files
 
@@ -108,4 +108,4 @@ uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
 
 `AnyFilesInterceptor` arguments:
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
