@@ -90,7 +90,7 @@ uploadFile(@UploadedFiles() files: { avatar?: MemoryStorageFile[], background?: 
 
 `FileFieldsInterceptor` arguments:
 
-- `uploadFields`: object of type [`UploadField`](src/interceptors/file-fields-interceptor.ts#L19)
+- `uploadFields`: object of type [`UploadField`](src/multipart/handlers/file-fields.ts#L10)
 
 - `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
