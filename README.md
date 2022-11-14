@@ -7,20 +7,30 @@
 
 </div>
 
-This library adds decorators for [Nest.js](https://github.com/nestjs/nest) to support [fastify-multipart](https://github.com/fastify/fastify-multipart). The API is very similar to the official Nest.js Express file decorators.
+This library adds decorators for [Nest.js](https://github.com/nestjs/nest) to support [@fastify/multipart](https://github.com/fastify/fastify-multipart). The API is very similar to the official Nest.js Express file decorators.
 
 ## Installation
 
 NPM
 
 ```bash
-$ npm install @blazity/nest-file-fastify fastify-multipart
+$ npm install @blazity/nest-file-fastify @fastify/multipart
 ```
 
 Yarn
 
 ```bash
-$ yarn add @blazity/nest-file-fastify fastify-multipart
+$ yarn add @blazity/nest-file-fastify @fastify/multipart
+```
+
+and register multpart plugin in your Nest.js application
+
+```typescript
+import fastyfyMultipart from '@fastify/multipart';
+
+...
+
+app.register(fastyfyMultipart);
 ```
 
 ## Docs
@@ -28,11 +38,11 @@ $ yarn add @blazity/nest-file-fastify fastify-multipart
 ### Single file
 
 ```ts
-import { FileInterceptor, UploadedFile, StorageFile } from '@blazity/nest-file-fastify';
+import { FileInterceptor, UploadedFile, MemoryStorageFile } from '@blazity/nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FileInterceptor('file'))
-uploadFile(@UploadedFile() file: StorageFile) {
+uploadFile(@UploadedFile() file: MemoryStorageFile) {
   console.log(file);
 }
 ```
@@ -41,16 +51,16 @@ uploadFile(@UploadedFile() file: StorageFile) {
 
 - `fieldname`: string - name of the field that holds a file
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Array of files
 
 ```ts
-import { FilesInterceptor, UploadedFiles, StorageFile } from '@blazity/nest-file-fastify';
+import { FilesInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FilesInterceptor('files'))
-uploadFile(@UploadedFiles() files: StorageFile[]) {
+uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
   console.log(files);
 }
 ```
@@ -61,41 +71,41 @@ uploadFile(@UploadedFiles() files: StorageFile[]) {
 
 - `maxCount`: optional number - maximum number of files to accept
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Multiple files
 
 ```ts
-import { FileFieldsInterceptor, UploadedFiles, StorageFile } from '@blazity/nest-file-fastify';
+import { FileFieldsInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FileFieldsInterceptor([
   { name: 'avatar', maxCount: 1 },
   { name: 'background', maxCount: 1 },
 ]))
-uploadFile(@UploadedFiles() files: { avatar?: StorageFile[], background?: StorageFile[] }) {
+uploadFile(@UploadedFiles() files: { avatar?: MemoryStorageFile[], background?: MemoryStorageFile[] }) {
   console.log(files);
 }
 ```
 
 `FileFieldsInterceptor` arguments:
 
-- `uploadFields`: object of type [`UploadField`](https://github.com/Blazity/nest-file-fastify/blob/master/src/interceptors/file-fields-interceptor.ts#L15)
+- `uploadFields`: object of type [`UploadField`](src/multipart/handlers/file-fields.ts#L10)
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
 
 ### Any files
 
 ```ts
-import { AnyFilesInterceptor, UploadedFiles, StorageFile } from '@blazity/nest-file-fastify';
+import { AnyFilesInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(AnyFilesInterceptor()
-uploadFile(@UploadedFiles() files: StorageFile[]) {
+uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
   console.log(files);
 }
 ```
 
 `AnyFilesInterceptor` arguments:
 
-- `options`: optional object of type [`UploadOptions`](https://github.com/Blazity/nest-file-fastify/blob/master/src/options.ts#L3)
+- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
