@@ -14,7 +14,6 @@ import { pump } from "../stream";
 export interface DiskStorageFile extends StorageFile {
   dest: string;
   filename: string;
-  originalFilename: string;
   path: string;
 }
 

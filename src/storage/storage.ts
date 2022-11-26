@@ -6,6 +6,7 @@ export interface StorageFile {
   fieldname: string;
   encoding: string;
   mimetype: string;
+  originalFilename: string;
 }
 
 export interface Storage<T extends StorageFile = StorageFile, K = any> {
