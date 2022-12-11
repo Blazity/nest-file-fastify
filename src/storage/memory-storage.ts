@@ -24,6 +24,7 @@ export class MemoryStorage implements Storage<MemoryStorageFile> {
       encoding,
       mimetype,
       fieldname,
+      originalFilename: file.filename,
     };
   }
 
