@@ -1,4 +1,4 @@
-import { MultipartFile as _MultipartFile } from "fastify-multipart";
+import { MultipartFile as _MultipartFile } from "@fastify/multipart";
 import { Readable } from "stream";
 
 import { Storage, StorageFile } from "../storage";
