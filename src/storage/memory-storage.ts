@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import { MultipartFile } from "fastify-multipart";
+import { MultipartFile } from "@fastify/multipart";
 import { RouteGenericInterface } from "fastify/types/route";
 import { Server, IncomingMessage } from "http";
 

@@ -5,6 +5,7 @@ import { StorageFile } from "../../storage";
 import { getParts } from "../request";
 import { removeStorageFiles } from "../file";
 import { filterUpload } from "../filter";
+import { MultipartFile } from "@fastify/multipart";
 
 export const handleMultipartAnyFiles = async (
   req: FastifyRequest,
@@ -22,7 +23,10 @@ export const handleMultipartAnyFiles = async (
   try {
     for await (const part of parts) {
       if (part.file) {
-        const file = await options.storage!.handleFile(part, req);
+        const file = await options.storage!.handleFile(
+          <MultipartFile>part,
+          req,
+        );
 
         if (await filterUpload(options, req, file)) {
           files.push(file);
