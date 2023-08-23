@@ -1,4 +1,4 @@
-import { MultipartFile } from "fastify-multipart";
+import { MultipartFile } from "@fastify/multipart";
 import { FastifyRequest } from "fastify";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
