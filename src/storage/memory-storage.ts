@@ -2,7 +2,7 @@ import { FastifyRequest } from "fastify";
 import { MultipartFile } from "@fastify/multipart";
 import { RouteGenericInterface } from "fastify/types/route";
 import { Server, IncomingMessage } from "http";
-
+import { getUniqueFilename } from "../fs";
 import { StorageFile, Storage } from "./storage";
 
 export interface MemoryStorageFile extends StorageFile {
@@ -15,7 +15,7 @@ export class MemoryStorage implements Storage<MemoryStorageFile> {
     req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage>,
   ) {
     const buffer = await file.toBuffer();
-
+    const filename = await getUniqueFilename(file.filename);
     const { encoding, mimetype, fieldname } = file;
 
     return {
@@ -24,6 +24,7 @@ export class MemoryStorage implements Storage<MemoryStorageFile> {
       encoding,
       mimetype,
       fieldname,
+      filename,
       originalFilename: file.filename,
     };
   }

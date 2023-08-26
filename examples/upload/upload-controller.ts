@@ -26,7 +26,7 @@ export class UploadController {
     }),
   )
   public async uploadSingle(@UploadedFile() file: MemoryStorageFile) {
-    console.log(file.buffer);
+    console.log(file);
     return file;
   }
 
