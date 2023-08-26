@@ -1,29 +1,30 @@
 <div align="left">
   <h1> fastify-multipart for Nest.js</h1>
-
-[![Github Actions](https://img.shields.io/github/workflow/status/blazity/nest-file-fastify/Build?style=flat-square)](https://github.com/Blazity/nest-file-fastify)
-[![NPM](https://img.shields.io/npm/v/@blazity/nest-file-fastify.svg?style=flat-square)](https://www.npmjs.com/package/@blazity/nest-file-fastify)
-[![NPM](https://img.shields.io/npm/dm/@blazity/nest-file-fastify?style=flat-square)](https://www.npmjs.com/package/@blazity/nest-file-fastify)
-
 </div>
 
-This library adds decorators for [Nest.js](https://github.com/nestjs/nest) to support [@fastify/multipart](https://github.com/fastify/fastify-multipart). The API is very similar to the official Nest.js Express file decorators.
 
-## Installation
+这个库为[Nest.js](https://github.com/nestjs/nest)添加了装饰器，以支持[@fastify/multipart](https://github.com/fastify/fastify-multipart)。其 API 与官方的 Nest.js Express 文件装饰器非常相似。
+
+
+## 安装
 
 NPM
 
 ```bash
-$ npm install @blazity/nest-file-fastify @fastify/multipart
+$ npm install nest-file-fastify @fastify/multipart
 ```
 
 Yarn
 
 ```bash
-$ yarn add @blazity/nest-file-fastify @fastify/multipart
+$ yarn add nest-file-fastify @fastify/multipart
 ```
+pnpm
 
-and register multpart plugin in your Nest.js application
+```bash
+$ pnpm install nest-file-fastify @fastify/multipart
+```
+并在您的 Nest.js 应用程序中注册 multipart 插件
 
 ```typescript
 import fastyfyMultipart from '@fastify/multipart';
@@ -33,12 +34,18 @@ import fastyfyMultipart from '@fastify/multipart';
 app.register(fastyfyMultipart);
 ```
 
-## Docs
+## 文档
 
-### Single file
+### 单个文件
+
+`FileInterceptor` 参数:
+
+- `fieldname`: string - 包含文件的字段的名称
+
+- `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
 
 ```ts
-import { FileInterceptor, UploadedFile, MemoryStorageFile } from '@blazity/nest-file-fastify';
+import { FileInterceptor, UploadedFile, MemoryStorageFile } from 'nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FileInterceptor('file'))
@@ -47,16 +54,17 @@ uploadFile(@UploadedFile() file: MemoryStorageFile) {
 }
 ```
 
-`FileInterceptor` arguments:
+### 数组文件
 
-- `fieldname`: string - name of the field that holds a file
+`FilesInterceptor` 参数:
 
-- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
+- `fieldname`: string - 包含文件的字段的名称
+  
+- `maxCount`: number - 可选的数字 - 接受的文件的最大数量
 
-### Array of files
-
+- `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
 ```ts
-import { FilesInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
+import { FilesInterceptor, UploadedFiles, MemoryStorageFile } from 'nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FilesInterceptor('files'))
@@ -65,18 +73,17 @@ uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
 }
 ```
 
-`FilesInterceptor` arguments:
+### 多个文件
 
-- `fieldname`: string - name of the field that holds files
+`FileFieldsInterceptor` 参数:
 
-- `maxCount`: optional number - maximum number of files to accept
+- `uploadFields`: 类型为  [`UploadField`](src/multipart/handlers/file-fields.ts#L11) 的数组对象
 
-- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
-
-### Multiple files
-
+- `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
 ```ts
-import { FileFieldsInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
+
+
+import { FileFieldsInterceptor, UploadedFiles, MemoryStorageFile } from 'nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(FileFieldsInterceptor([
@@ -88,16 +95,16 @@ uploadFile(@UploadedFiles() files: { avatar?: MemoryStorageFile[], background?: 
 }
 ```
 
-`FileFieldsInterceptor` arguments:
 
-- `uploadFields`: object of type [`UploadField`](src/multipart/handlers/file-fields.ts#L10)
+### 任意文件
 
-- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)
+`AnyFilesInterceptor` 参数:
 
-### Any files
+- `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
+
 
 ```ts
-import { AnyFilesInterceptor, UploadedFiles, MemoryStorageFile } from '@blazity/nest-file-fastify';
+import { AnyFilesInterceptor, UploadedFiles, MemoryStorageFile } from 'nest-file-fastify';
 
 @Post('upload')
 @UseInterceptors(AnyFilesInterceptor()
@@ -106,6 +113,3 @@ uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
 }
 ```
 
-`AnyFilesInterceptor` arguments:
-
-- `options`: optional object of type [`UploadOptions`](src/multipart/options.ts#L4)

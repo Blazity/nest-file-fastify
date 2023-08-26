@@ -14,19 +14,33 @@ import {
 } from "../../src";
 
 const PATH_UPLOADS = resolve(".uploads");
-
+const FILESIZE = 1024 * 1024 * 10;
 @Controller("upload")
 export class UploadController {
   @Post("single")
-  @UseInterceptors(FileInterceptor("file"))
+  @UseInterceptors(
+    FileInterceptor("file", {
+      limits: {
+        fileSize: FILESIZE,
+      },
+    }),
+  )
   public async uploadSingle(@UploadedFile() file: MemoryStorageFile) {
-    console.log(file.buffer);
+    console.log(file);
+    return file;
   }
 
   @Post("single-disk")
-  @UseInterceptors(FileInterceptor("file", { dest: PATH_UPLOADS }))
+  @UseInterceptors(
+    FileInterceptor("file", {
+      dest: PATH_UPLOADS,
+      limits: {
+        fileSize: FILESIZE,
+      },
+    }),
+  )
   public async uploadSingleToDisk(@UploadedFile() file: DiskStorageFile) {
-    console.log(file.path);
+    console.log(file);
   }
 
   @Post("array")
@@ -53,6 +67,7 @@ export class UploadController {
     },
   ) {
     console.log(files);
+    return files;
   }
 
   @Post("any")
@@ -62,6 +77,7 @@ export class UploadController {
     files: MemoryStorageFile[],
   ) {
     console.log(files);
+    return files;
   }
 
   @Post("temp")
@@ -75,5 +91,6 @@ export class UploadController {
   )
   public async uploadAndRemove(@UploadedFile() file: DiskStorageFile) {
     console.log(file.size);
+    return file;
   }
 }

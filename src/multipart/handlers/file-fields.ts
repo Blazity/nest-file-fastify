@@ -6,6 +6,7 @@ import { StorageFile } from "../../storage/storage";
 import { getParts } from "../request";
 import { removeStorageFiles } from "../file";
 import { filterUpload } from "../filter";
+import { MultipartFile } from "@fastify/multipart";
 
 export interface UploadField {
   /**
@@ -66,7 +67,10 @@ export const handleMultipartFileFields = async (
           );
         }
 
-        const file = await options.storage!.handleFile(part, req);
+        const file = await options.storage!.handleFile(
+          part as MultipartFile,
+          req,
+        );
 
         if (await filterUpload(options, req, file)) {
           files[part.fieldname].push(file);

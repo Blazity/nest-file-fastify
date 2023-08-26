@@ -5,6 +5,7 @@ import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
 import { getParts } from "../request";
 import { filterUpload } from "../filter";
+import { MultipartFile } from "@fastify/multipart";
 
 export const handleMultipartSingleFile = async (
   req: FastifyRequest,
@@ -34,8 +35,10 @@ export const handleMultipartSingleFile = async (
           );
         }
 
-        const _file = await options.storage!.handleFile(part, req);
-
+        const _file = await options.storage!.handleFile(
+          part as MultipartFile,
+          req,
+        );
         if (await filterUpload(options, req, _file)) {
           file = _file;
         }
@@ -47,7 +50,6 @@ export const handleMultipartSingleFile = async (
     await removeFiles(true);
     throw error;
   }
-
   return {
     body,
     file,
