@@ -1,6 +1,6 @@
 {
   "name": "nest-file-fastify",
-  "version": "3.0.3",
+  "version": "3.0.5",
   "description": "@fastify/multipart decorators for Nest.js",
   "license": "MIT",
   "main": "build/src/index.js",
@@ -29,7 +29,8 @@
     "build": "tsc --p tsconfig.lib.json",
     "lint": "eslint \"src/**\" --ext \".js,.jsx,.ts,.tsx\"",
     "lint:fix": "npm run lint -- --fix",
-    "clean": "rimraf build"
+    "clean": "rimraf build",
+    "prepublishOnly": "yarn clean && npm run build"
   },
   "devDependencies": {
     "@fastify/multipart": "^7.7.3",

@@ -56,9 +56,11 @@ uploadFile(@UploadedFile() file: MemoryStorageFile) {
 
 ### 数组文件
 
-`FileInterceptor` 参数:
+`FilesInterceptor` 参数:
 
 - `fieldname`: string - 包含文件的字段的名称
+  
+- `maxCount`: number - 可选的数字 - 接受的文件的最大数量
 
 - `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
 ```ts
@@ -73,15 +75,14 @@ uploadFile(@UploadedFiles() files: MemoryStorageFile[]) {
 
 ### 多个文件
 
-`FilesInterceptor` 参数:
+`FileFieldsInterceptor` 参数:
 
-- `fieldname`: string - 包含文件的字段的名称
-
-- `maxCount`:  可选的数字 - 接受的文件的最大数量
+- `uploadFields`: 类型为  [`UploadField`](src/multipart/handlers/file-fields.ts#L11) 的数组对象
 
 - `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
-
 ```ts
+
+
 import { FileFieldsInterceptor, UploadedFiles, MemoryStorageFile } from 'nest-file-fastify';
 
 @Post('upload')
@@ -93,12 +94,6 @@ uploadFile(@UploadedFiles() files: { avatar?: MemoryStorageFile[], background?: 
   console.log(files);
 }
 ```
-
-`FileFieldsInterceptor` 参数:
-
-- `uploadFields`: 类型为  [`UploadField`](src/multipart/handlers/file-fields.ts#L10) 的对象
-
-- `options`: 可选的 [`UploadOptions`](src/multipart/options.ts#L5) 类型对象
 
 
 ### 任意文件
