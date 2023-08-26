@@ -1,14 +1,17 @@
 {
-  "name": "@blazity/nest-file-fastify",
-  "version": "2.0.0",
+  "name": "nest-file-fastify",
+  "version": "3.0.3",
   "description": "@fastify/multipart decorators for Nest.js",
   "license": "MIT",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
-  "homepage": "https://blazity.com/",
   "files": [
     "build/src"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/976977577/nest-file-fastify"
+  },
   "keywords": [
     "nest",
     "nestjs",
@@ -17,11 +20,8 @@
     "@fastify/multipart",
     "upload",
     "file",
-    "blazity"
+    "nest-file"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "dev": "concurrently \"tsc --watch --p tsconfig.lib.json\" \"tsc --watch --p tsconfig.examples.json\"",
     "watch": "nodemon ./build/examples/index.js",
@@ -29,8 +29,7 @@
     "build": "tsc --p tsconfig.lib.json",
     "lint": "eslint \"src/**\" --ext \".js,.jsx,.ts,.tsx\"",
     "lint:fix": "npm run lint -- --fix",
-    "clean": "rimraf build",
-    "prepublishOnly": "yarn clean && npm run build"
+    "clean": "rimraf build"
   },
   "devDependencies": {
     "@fastify/multipart": "^7.7.3",
