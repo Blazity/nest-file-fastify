@@ -6,6 +6,7 @@ export interface StorageFile {
   fieldname: string;
   encoding: string;
   mimetype: string;
+  filename: string;
   originalFilename: string;
 }
 
